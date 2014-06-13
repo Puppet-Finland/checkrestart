@@ -23,14 +23,19 @@
 # BSD-lisence
 # See file LICENSE for details
 #
-class checkrestart {
+class checkrestart
+(
+    $status = 'present'
+)
+{
 
 # Rationale for this is explained in init.pp of the sshd module
 if hiera('manage_checkrestart', 'true') != 'false' {
 
     if $::osfamily == 'Debian' {
-        include debiangoodies::install
+        class { 'debiangoodies::install':
+            status => $status,
+        }
     }
-
 }
 }
