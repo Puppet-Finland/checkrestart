@@ -21,9 +21,10 @@
 # == Examples
 #
 #   class { 'checkrestart::cron':
-#     hour => '3',
-#     minute => '35'
-#     weekday => '1-5',
+#       hour => '3',
+#       minute => '35'
+#       weekday => '1-5',
+#   }
 #
 class checkrestart::cron(
     $status = 'present',
