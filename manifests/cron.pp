@@ -5,7 +5,7 @@
 #
 # == Parameters
 #
-# [*status*]
+# [*ensure*]
 #   Status of the cronjob. Valid values 'present' and 'absent'. Defaults to 
 #   'present'.
 # [*hour*]
@@ -26,8 +26,9 @@
 #       weekday => '1-5',
 #   }
 #
-class checkrestart::cron(
-    $status = 'present',
+class checkrestart::cron
+(
+    $ensure = 'present',
     $hour = '8',
     $minute = '20',
     $weekday = '*',
@@ -35,10 +36,7 @@ class checkrestart::cron(
 )
 {
 
-# Rationale for this is explained in init.pp of the sshd module
-if hiera('manage_checkrestart', 'true') != 'false' {
-
-    include checkrestart
+    include ::checkrestart
 
     if $::osfamily == 'Debian' {
 
@@ -47,14 +45,13 @@ if hiera('manage_checkrestart', 'true') != 'false' {
         $cron_command = "checkrestart|grep -v \"Found 0 processes using old versions of upgraded files\""
 
         cron { 'checkrestart-cron':
-            ensure => $status,
-            command => $cron_command,
-            user => root,
-            hour => $hour,
-            minute => $minute,
-            weekday => $weekday,
+            ensure      => $ensure,
+            command     => $cron_command,
+            user        => root,
+            hour        => $hour,
+            minute      => $minute,
+            weekday     => $weekday,
             environment => [ 'PATH=/sbin:/usr/sbin:/bin:/usr/bin', "MAILTO=${email}" ],
         }
     }
-}
 }
